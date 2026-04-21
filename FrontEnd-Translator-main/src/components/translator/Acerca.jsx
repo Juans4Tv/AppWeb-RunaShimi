@@ -1,14 +1,14 @@
 // importamos react y los hooks 
 import React, { useState, useEffect } from 'react';
 
-// Componente Acerca del runa shimi
+// Componente Acerca del Runa Shimi
 const Acerca = () => {
-  // Estado para detectar si es móvil o no
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
+  // Estado para detectar si es móvil o no (Ajustado a 768px para mantener consistencia)
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   // Detecta cambios en el tamaño de la pantalla para actualizar el estado de isMobile
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 1024);
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
     //Agregamos el event listener para detectar cambios en el tamaño de la pantalla
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
@@ -19,13 +19,16 @@ const Acerca = () => {
     //Contenedor principal 
     container: {
       width: '100%',
-      maxWidth: '53.125rem', 
-      margin: '5rem auto 3rem',
+      // CLAVE: Limitamos el ancho en celular para forzar el centrado y proteger el layout del sidebar
+      maxWidth: isMobile ? '22rem' : '53.125rem', 
+      margin: '4rem auto 3rem',
+      padding: isMobile ? '0 0.5rem' : '0',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       boxSizing: 'border-box',
       position: 'relative',
+      zIndex: 1, // Permite que el menú lateral pase por encima sin problema
       clear: 'both',
     },
     // Titulo y Icono 
@@ -35,13 +38,13 @@ const Acerca = () => {
       gap: '0.625rem',
       marginBottom: '2.5rem',
       textAlign: 'center',
-      with: '100%',
+      width: '100%',
       justifyContent: 'center',
     },
     // Estilo del titulo 
     headerText: {
-      fontSize: '2rem',
-        color: '#5d4037',
+      fontSize: isMobile ? '1.6rem' : '2rem', // Texto adaptado a celular
+      color: '#5d4037',
       margin: 0,
     },
     // Circulo del icono del titulo
@@ -59,12 +62,11 @@ const Acerca = () => {
       display: 'grid',
       //cambia a una sola columna en movil
       gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
-      gap: '1rem',
+      gap: isMobile ? '1.5rem' : '1rem', // Un poco más de separación vertical en móvil
       width: '100%',
-      padding: isMobile ? '0 0.5rem' : '0',
       boxSizing: 'border-box',
     },
-// Estilo de cada tarjeta
+    // Estilo de cada tarjeta
     card: {
       backgroundColor: 'white',
       borderRadius: '1.875rem', 
@@ -76,6 +78,8 @@ const Acerca = () => {
       position: 'relative',
       paddingBottom: '1.5625rem',
       border: '0.0625rem solid #f4e6d4',
+      width: '100%',
+      boxSizing: 'border-box',
     },
     // Contenedor del blob SVG y el icono
     blobContainer: {
@@ -137,59 +141,61 @@ const Acerca = () => {
     //texto del pie de pagina
     footerText: {
       color: '#5a3d2b',
-      fontSize: '0.875rem',
+      fontSize: isMobile ? '0.75rem' : '0.875rem', // Ligeramente más pequeño en celular
       fontWeight: 'bold',
+      textAlign: 'center',
     },
     //texto de advertencia final
     disclaimer: {
       marginTop: '0.9375rem',
-      fontSize: '0.75rem',
+      fontSize: isMobile ? '0.65rem' : '0.75rem',
       color: '#5a3d2b',
       textAlign: 'center',
       fontWeight: 'bold',
+      padding: isMobile ? '0 1rem' : '0',
     }
   };
- // Información de las tarjetas 
+
+  // Información de las tarjetas (contenido dinámico)
   const cardsInfo = [
     {
       title: 'Origen',
-      color: '#c64c24',
+      color: '#C64C24',
       text: 'El Runa Shimi es hablado por millones de personas en Ecuador, Perú, Bolivia y Colombia. Es la lengua del pueblo Inca y sus descendientes. 🦙',
       icon: '⛰️',
-      
-
       // SVG decorativo
       svg: (
         <svg viewBox="0 0 100 45" preserveAspectRatio="none" style={styles.blobSvg}>
-          <path d="M0,0 L100,0 L100,20 C85,35 75,5 50,25 C25,45 15,10 0,20 Z" fill="#c64c24"/>
-          <circle cx="85" cy="25" r="2.5" fill="#c64c24" />
-          <circle cx="18" cy="30" r="1.5" fill="#c64c24" />
+          <path d="M0,0 L100,0 L100,20 C85,35 75,5 50,25 C25,45 15,10 0,20 Z" fill="#C64C24"/>
+          <circle cx="85" cy="25" r="2.5" fill="#C64C24" />
+          <circle cx="18" cy="30" r="1.5" fill="#C64C24" />
         </svg>
       )
     },
     {
       title: 'Cosmovisión',
-      color: '#3d8c56',
+      color: '#3D8C56',
       text: 'Representa el Sumak Kawsay (Buen Vivir) ✨, una filosofía de vida en armonía con la Pachamama (Madre Tierra) 🌍 y la comunidad.',
       icon: '🌿',
       svg: (
         <svg viewBox="0 0 100 45" preserveAspectRatio="none" style={styles.blobSvg}>
-          <path d="M0,0 L100,0 L100,15 C80,30 70,-5 40,20 C20,35 10,15 0,25 Z" fill="#3d8c56"/>
-          <circle cx="90" cy="22" r="2" fill="#3d8c56" />
-          <circle cx="10" cy="32" r="2" fill="#3d8c56" />
+          <path d="M0,0 L100,0 L100,15 C80,30 70,-5 40,20 C20,35 10,15 0,25 Z" fill="#3D8C56"/>
+          <circle cx="90" cy="22" r="2" fill="#3D8C56" />
+          <circle cx="10" cy="32" r="2" fill="#3D8C56" />
         </svg>
       )
     },
     {
       title: 'Preservación',
-      color: '#483068',
+      // Tono ocre/tierra más vibrante para acompañar al terracota y al verde
+      color: '#D48C29', 
       text: 'Ayuda a preservar esta lengua ancestral. Cada palabra que aprendas contribuye a mantener viva la cultura de los pueblos andinos. ☀️',
       icon: '🤲',
       svg: (
         <svg viewBox="0 0 100 45" preserveAspectRatio="none" style={styles.blobSvg}>
-          <path d="M0,0 L100,0 L100,25 C75,45 65,10 40,25 C20,35 10,15 0,20 Z" fill="#483068"/>
-          <circle cx="88" cy="28" r="2.5" fill="#483068" />
-          <circle cx="25" cy="32" r="1.5" fill="#483068" />
+          <path d="M0,0 L100,0 L100,25 C75,45 65,10 40,25 C20,35 10,15 0,20 Z" fill="#D48C29"/>
+          <circle cx="88" cy="28" r="2.5" fill="#D48C29" />
+          <circle cx="25" cy="32" r="1.5" fill="#D48C29" />
         </svg>
       )
     }
@@ -204,7 +210,7 @@ const Acerca = () => {
         <div style={styles.iconCircle}>🌱</div>
       </div>
 
-      {/*  Tarjetas */}
+      {/* Tarjetas */}
       <div style={styles.grid}>
         {cardsInfo.map((card, index) => (
           <div key={index} style={styles.card}>

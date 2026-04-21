@@ -1,5 +1,5 @@
 import React, { useState } from 'react'; // Importamos React y los hooks necesarios
-import logo from '../../assets/logo.png'; 
+import logo from '../../assets/logo.png'; //logo
 
 // Componente de recuperación de contraseña
 const Recuperar = ({ onGoToLogin }) => {

@@ -2,27 +2,28 @@
 import React, { useState, useEffect } from "react";
 
 // Importamos iconos
-import { Search, Copy, Check } from 'lucide-react'; // Check se usa para feedback visual al copiar
+import { Search, Copy, Check } from 'lucide-react'; 
 
 const API_URL = "http://localhost:4000/api/dictionary";
 
-const defaultPalabras = [
-  { _id: 1, source: "Gracias", target: "Yupaychani", language: "es-kic", color: "#C74C22" },
-  { _id: 2, source: "Hola", target: "Imanalla", language: "es-kic", color: "#4F7E53" },
-  { _id: 3, source: "Tierra", target: "Allpa", language: "es-kic", color: "#5F477E" },
-  { _id: 4, source: "Agua", target: "Yaku", language: "es-kic", color: "#C6903D" },
-  { _id: 5, source: "Sol", target: "Inti", language: "es-kic", color: "#4F6561" },
-  { _id: 6, source: "Luna", target: "Killa", language: "es-kic", color: "#8E6953" },
-  { _id: 7, source: "Cielo", target: "Q'illqa", language: "es-kic", color: "#C74C22" },
-  { _id: 8, source: "Estrella", target: "Chaska", language: "es-kic", color: "#4F7E53" },
-];
+// Tonos tierra más vivos para la interfaz
+const colors = ["#C74C22", "#6A994E", "#E07A5F", "#C6903D", "#D4A373", "#B5653D"];
 
-const colors = ["#C74C22", "#4F7E53", "#5F477E", "#C6903D", "#4F6561", "#8E6953"];
+const defaultPalabras = [
+  { _id: 1, source: "Gracias", target: "Yupaychani", language: "es-kic", color: colors[0] },
+  { _id: 2, source: "Hola", target: "Imanalla", language: "es-kic", color: colors[1] },
+  { _id: 3, source: "Tierra", target: "Allpa", language: "es-kic", color: colors[2] },
+  { _id: 4, source: "Agua", target: "Yaku", language: "es-kic", color: colors[3] },
+  { _id: 5, source: "Sol", target: "Inti", language: "es-kic", color: colors[4] },
+  { _id: 6, source: "Luna", target: "Killa", language: "es-kic", color: colors[5] },
+  { _id: 7, source: "Cielo", target: "Q'illqa", language: "es-kic", color: colors[0] },
+  { _id: 8, source: "Estrella", target: "Chaska", language: "es-kic", color: colors[1] },
+];
 
 // Componente Diccionario
 const Diccionario = () => {
 
-  // --- ESTADOS 
+  // --- ESTADOS ---
 
   // Detecta si es móvil
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -128,19 +129,22 @@ const Diccionario = () => {
   // --- ESTILOS ---
   const styles = {
 
-    // Contenedor principal
+    // Contenedor principal adaptado para convivir con el menú lateral
     container: { 
       width: '100%', 
-      maxWidth: '65rem', 
+      // Limitamos el ancho en celular para forzar el centrado y dar espacio al sidebar
+      maxWidth: isMobile ? '22rem' : '65rem', 
       margin: '0 auto', 
-      padding: isMobile ? '1rem' : '2rem', 
+      padding: isMobile ? '1rem 0.5rem' : '2rem', 
       minHeight: '100vh', 
-      boxSizing: 'border-box' 
+      boxSizing: 'border-box',
+      position: 'relative',
+      zIndex: 1
     },
 
     // Título principal
     headerTitle: { 
-      fontSize:  '2rem', 
+      fontSize: isMobile ? '1.6rem' : '2rem', 
       color: '#5D4037', 
       textAlign: 'center', 
       marginBottom: '1.5rem', 
@@ -161,7 +165,7 @@ const Diccionario = () => {
     // Input de búsqueda
     input: { 
       width: '100%', 
-      padding: isMobile ? '0.8rem 1rem 0.8rem 3rem' : '1rem 7rem 1rem 3.5rem', 
+      padding: isMobile ? '0.8rem 1rem 0.8rem 2.5rem' : '1rem 7rem 1rem 3.5rem', 
       borderRadius: '50px', 
       border: '2px solid #5D4037', 
       fontSize: '1rem', 
@@ -189,16 +193,17 @@ const Diccionario = () => {
       display: 'flex', 
       flexWrap: 'wrap', 
       justifyContent: 'center', 
-      gap: isMobile ? '8px' : '12px', 
+      gap: isMobile ? '6px' : '12px', 
       marginBottom: '2rem' 
     },
 
     // Letras
     letter: { 
-      fontSize: isMobile ? '1.1rem' : '1.4rem', 
+      fontSize: isMobile ? '1rem' : '1.4rem', 
       fontWeight: '900', 
       color: '#5D4037', 
-      cursor: 'pointer' 
+      cursor: 'pointer',
+      padding: isMobile ? '2px 4px' : '0'
     },
 
     // Grid de tarjetas
@@ -280,7 +285,7 @@ const Diccionario = () => {
 
       {/* Buscador */}
       <div style={styles.searchBox}>
-        <Search size={20} style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)' }} />
+        <Search size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
         
         <input 
           style={styles.input} 
@@ -330,7 +335,7 @@ const Diccionario = () => {
                 title="Copiar palabra"
               >
                 {copiedId === (p._id || index) 
-                  ? <Check size={18} color="#4F7E53" /> 
+                  ? <Check size={18} color="#6A994E" /> 
                   : <Copy size={18} />
                 }
               </div>

@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-globals */
 import React, { useState, useEffect } from 'react';
 import Sidebar from '../../components/layout/Sidebar';
-import { Upload, FileText, Users, Trash2, Download, Plus, X } from 'lucide-react';
+import { Upload, FileText, Users, Trash2, Download, LogOut } from 'lucide-react';
 
 const API_URL = "http://localhost:4000/api";
 
@@ -92,7 +92,6 @@ const AdminPage = ({ isSidebarOpen, onToggleSidebar = () => {}, onLogout }) => {
 
   const handleDeletePalabra = async (id) => {
     if (!confirm('¿Eliminar palabra?')) return;
-    
     try {
       const token = localStorage.getItem('token');
       await fetch(`${API_URL}/admin/dictionary/${id}`, {
@@ -110,17 +109,25 @@ const AdminPage = ({ isSidebarOpen, onToggleSidebar = () => {}, onLogout }) => {
     main: { flex: 1, marginLeft: isSidebarOpen ? '15.625rem' : '3.75rem', padding: '2rem', overflowY: 'auto', transition: 'margin-left 0.3s ease' },
     header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' },
     title: { fontSize: '2rem', color: '#5D4037', margin: 0 },
-    btnVolver: { padding: '0.5rem 1rem', backgroundColor: '#C4451C', color: 'white', border: 'none', borderRadius: '0.5rem', cursor: 'pointer' },
+    btnVolver: { 
+        display: 'flex', 
+        alignItems: 'center', 
+        gap: '0.5rem', 
+        padding: '0.5rem 1rem', 
+        backgroundColor: '#C4451C', 
+        color: 'white', 
+        border: 'none', 
+        borderRadius: '0.5rem', 
+        cursor: 'pointer',
+        fontWeight: 'bold'
+    },
     tabs: { display: 'flex', gap: '1rem', marginBottom: '2rem' },
-    tab: (active) => ({ padding: '0.75rem 1.5rem', backgroundColor: active ? '#5D4037' : 'white', color: active ? 'white' : '#5D4037', border: 'none', borderRadius: '0.5rem', cursor: 'pointer', fontWeight: 'bold' }),
+    tab: (active) => ({ padding: '0.75rem 1.5rem', backgroundColor: active ? '#5D4037' : 'white', color: active ? 'white' : '#5D4037', border: 'none', borderRadius: '0.5rem', cursor: 'pointer', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem' }),
     card: { backgroundColor: 'white', borderRadius: '1rem', padding: '1.5rem', marginBottom: '1rem', boxShadow: '0 0.25rem 0.625rem rgba(0,0,0,0.1)' },
     table: { width: '100%', borderCollapse: 'collapse' },
     th: { textAlign: 'left', padding: '0.75rem', borderBottom: '2px solid #5D4037', color: '#5D4037' },
     td: { padding: '0.75rem', borderBottom: '1px solid #ddd' },
-    input: { padding: '0.5rem', border: '1px solid #ddd', borderRadius: '0.25rem', marginRight: '0.5rem' },
     uploadArea: { border: '2px dashed #5D4037', borderRadius: '1rem', padding: '2rem', textAlign: 'center', cursor: 'pointer', marginBottom: '1rem' },
-    success: { color: 'green', marginBottom: '1rem' },
-    error: { color: 'red', marginBottom: '1rem' },
     badge: (role) => ({ padding: '0.25rem 0.5rem', borderRadius: '0.25rem', fontSize: '0.8rem', backgroundColor: role === 'admin' ? '#C4451C' : '#4A7C59', color: 'white' })
   };
 
@@ -132,46 +139,46 @@ const AdminPage = ({ isSidebarOpen, onToggleSidebar = () => {}, onLogout }) => {
             <div style={styles.card}>
               <h3>Importar Diccionario (Excel)</h3>
               <p style={{color: '#666', marginBottom: '1rem'}}>El Excel debe tener columnas: source, target, language</p>
-              <label style={styles.uploadArea, { display: 'block' }}>
+              <label style={{ ...styles.uploadArea, display: 'block' }}>
                 <input type="file" accept=".xlsx,.xls" onChange={handleUploadExcel} style={{display: 'none'}} />
-                <Upload size={32} color="#5D4037" />
+                <Upload size={32} color="#5D4037" style={{margin: '0 auto'}} />
                 <p>Click o arrastra archivo Excel</p>
               </label>
-              {success && <p style={styles.success}>{success}</p>}
-              {error && <p style={styles.error}>{error}</p>}
+              {success && <p style={{color: 'green'}}>{success}</p>}
+              {error && <p style={{color: 'red'}}>{error}</p>}
             </div>
-
 
             <div style={styles.card}>
               <h3>Palabras del Diccionario ({palabras.length})</h3>
-              <table style={styles.table}>
-                <thead>
-                  <tr>
-                    <th style={styles.th}>Español</th>
-                    <th style={styles.th}>Runa Shimi</th>
-                    <th style={styles.th}>Idioma</th>
-                    <th style={styles.th}>Acción</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {palabras.map((p, i) => (
-                    <tr key={p._id || i}>
-                      <td style={styles.td}>{p.source}</td>
-                      <td style={styles.td}><b>{p.target}</b></td>
-                      <td style={styles.td}>{p.language}</td>
-                      <td style={styles.td}>
-                        <button onClick={() => handleDeletePalabra(p._id)} style={{background: 'none', border: 'none', cursor: 'pointer', color: 'red'}}>
-                          <Trash2 size={18} />
-                        </button>
-                      </td>
+              <div style={{overflowX: 'auto'}}>
+                <table style={styles.table}>
+                    <thead>
+                    <tr>
+                        <th style={styles.th}>Español</th>
+                        <th style={styles.th}>Runa Shimi</th>
+                        <th style={styles.th}>Idioma</th>
+                        <th style={styles.th}>Acción</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                    </thead>
+                    <tbody>
+                    {palabras.map((p, i) => (
+                        <tr key={p._id || i}>
+                        <td style={styles.td}>{p.source}</td>
+                        <td style={styles.td}><b>{p.target}</b></td>
+                        <td style={styles.td}>{p.language}</td>
+                        <td style={styles.td}>
+                            <button onClick={() => handleDeletePalabra(p._id)} style={{background: 'none', border: 'none', cursor: 'pointer', color: 'red'}}>
+                            <Trash2 size={18} />
+                            </button>
+                        </td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+              </div>
             </div>
           </div>
         );
-
       case 'usuarios':
         return (
           <div style={styles.card}>
@@ -198,7 +205,6 @@ const AdminPage = ({ isSidebarOpen, onToggleSidebar = () => {}, onLogout }) => {
             </table>
           </div>
         );
-
       case 'traducciones':
         return (
           <div style={styles.card}>
@@ -225,19 +231,24 @@ const AdminPage = ({ isSidebarOpen, onToggleSidebar = () => {}, onLogout }) => {
             </table>
           </div>
         );
-
-      default:
-        return null;
+      default: return null;
     }
   };
 
   return (
     <div style={styles.container}>
-      <Sidebar isOpen={isSidebarOpen} onToggle={onToggleSidebar} setVistaActual={setVistaActual} esAdmin={true} vistaActual={vistaActual} />
+      <Sidebar 
+        isOpen={isSidebarOpen} 
+        onToggle={onToggleSidebar} 
+        setVistaActual={setVistaActual} 
+        esAdmin={true} 
+        vistaActual={vistaActual}
+        onLogout={onLogout} // Importante: pasar la prop aquí
+      />
       <main style={styles.main}>
         <div style={styles.header}>
           <h1 style={styles.title}>Panel de Administrador</h1>
-          <button style={styles.btnVolver} onClick={onLogout}>Cerrar Sesión</button>
+          
         </div>
         
         <div style={styles.tabs}>

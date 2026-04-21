@@ -1,7 +1,7 @@
 // Importamos React y los hooks necesarios
 import React, { useState, useEffect } from 'react';
 
-// Componente frases 
+// Componente FrasesComunes
 const FrasesComunes = () => {
 
   // Estado para detectar si el dispositivo es móvil
@@ -33,42 +33,53 @@ const FrasesComunes = () => {
   // Estilos en CSS en JS
   const styles = {
 
+    // Contenedor principal
+    container: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center", 
+      width: "100%",
+      padding: "2rem 0",
+      position: "relative", // Ayuda a que el menú lateral se pueda superponer sin desplazar esto
+      zIndex: 1,
+    },
+
     // Título principal
     header: {
-      fontSize: "2rem",
+      fontSize: isMobile ? "1.6rem" : "2rem", // Un poco más pequeño en celular
       color: "#5a3d2b",
-      marginBottom: "1.875rem",
+      marginBottom: "1.5rem",
       display: "flex",
       alignItems: "center",
       gap: "0.625rem",
-      justifyContent: "center", // Centra el título
+      justifyContent: "center",
     },
 
     // Contenedor en grid
     grid: {
       display: "grid",
-
-      // Si es móvil → 1 columna
-      // Si no → 2 columnas 
-      gridTemplateColumns: isMobile ? "1fr" : "repeat(2, 320px)",
+      gridTemplateColumns: isMobile ? "1fr" : "repeat(2, 260px)",
       gap: "1.25rem",
       width: "100%",
-      maxWidth: "50rem",
-      margin: "0 auto", // Centra el grid
-      padding: isMobile ? '0 0.5rem' : '0',
+      // CLAVE PARA CELULAR: Limitamos el ancho a 17rem para hacerlas pequeñas y forzar el centrado
+      maxWidth: isMobile ? "17rem" : "40rem", 
+      justifyContent: "center", 
+      margin: "0 auto",
       boxSizing: 'border-box',
-      justifyContent: "center",
     },
 
     // Tarjeta de cada frase
     frasescard: {
       backgroundColor: "white",
       borderRadius: "1.875rem",
-      padding: "0.9375rem 1.5625rem",
+      // Reducimos el padding en celular para que se adapte al nuevo tamaño
+      padding: isMobile ? "0.6rem 1rem" : "0.8rem 1.2rem", 
       display: "flex",
       alignItems: "center",
       gap: "0.9375rem",
       boxShadow: "0 0.125rem 0.375rem rgba(0,0,0,0.05)",
+      width: "100%",
+      boxSizing: 'border-box',
     },
 
     // Icono 
@@ -90,7 +101,7 @@ const FrasesComunes = () => {
 
     // Texto en Runa Shimi el principal
     runaText: {
-      fontSize: "1.25rem",
+      fontSize: isMobile ? "1.15rem" : "1.25rem", // Ligeramente más pequeño en celular
       fontWeight: "bold",
       color: "#2d5a42",
       margin: 0,
@@ -99,7 +110,7 @@ const FrasesComunes = () => {
 
   // Render del componente
   return (
-    <div>
+    <div style={styles.container}>
 
       {/* Título */}
       <h1 style={styles.header}>

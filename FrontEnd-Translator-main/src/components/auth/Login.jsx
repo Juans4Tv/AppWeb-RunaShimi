@@ -1,4 +1,5 @@
-import React, { useState } from 'react';//import de reac
+import React, { useState } from 'react';
+import logo from '../../assets/logo.png';
 
 const API_URL = "http://localhost:4000/api/auth";
 
@@ -41,37 +42,251 @@ const Login = ({ onGoToRegister, onGoToRecuperar, onLoginSuccess }) => {
   };
 
   const styles = {
-    canvas: { width: '100%', minHeight: '100vh', backgroundColor: '#F4E6D4', display: 'flex', justifyContent: 'center', alignItems: 'center', fontFamily: "'Open Sans', sans-serif", margin: 0, padding: '1.25rem', boxSizing: 'border-box' },
-    card: { width: '100%', maxWidth: '37.5rem', backgroundColor: '#FFF4DC', borderRadius: '1.6875rem', position: 'relative', boxShadow: '0 0.5rem 1rem rgba(0,0,0,0.1)', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingBottom: '1.875rem' },
-    waveHeader: { width: '100%', position: 'relative', overflow: 'hidden', display: 'flex', justifyContent: 'center' },
-    waveSvg: { display: 'block', width: '100%', height: 'auto' },
-    waveShape: { fill: '#C4451C' },
-    cardBody: { width: '100%', padding: '0 1.25rem', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', alignItems: 'center' },
-    title: { fontSize: '1.875rem', fontWeight: 'bold', color: '#5D4037', margin: '0 0 0.625rem 0', textAlign: 'center' },
-    slogan: { fontSize: '1.125rem', fontWeight: '600', color: '#5D4037', margin: '0 0 0.9375rem 0', textAlign: 'center' },
-    form: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem', width: '100%', boxSizing: 'border-box' },
-    inputGroup: { width: '100%', maxWidth: '35.4375rem', height: '3.75rem', backgroundColor: '#F9FAFB', borderRadius: '6.25rem', border: '0.125rem solid #5D4037', display: 'flex', alignItems: 'center', padding: '0 1.25rem', boxSizing: 'border-box' },
-    iconWrapper: { width: '1.5rem', height: '1.5rem', marginRight: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
-    eyeIconWrapper: { width: '1.5rem', height: '1.5rem', marginLeft: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' },
-    input: { flex: 1, border: 'none', backgroundColor: 'transparent', outline: 'none', fontSize: '1.125rem', color: '#5D4037' },
-    controlsRow: { width: '100%', maxWidth: '35.4375rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.3125rem', marginBottom: '1.25rem' },
-    forgotPassword: { fontSize: '1rem', color: '#735240', textDecoration: 'none', cursor: 'pointer' },
-    submitBtn: { width: '100%', maxWidth: '35.4375rem', height: '3.75rem', backgroundColor: '#C7856A', borderRadius: '1.6875rem', border: 'none', fontSize: '1.375rem', fontWeight: 'bold', color: '#FFFFFF', cursor: 'pointer', marginBottom: '1.5625rem' },
-    registerText: { fontSize: '1rem', color: '#000000', margin: 0, textAlign: 'center' },
-    registerLink: { fontWeight: 'bold', cursor: 'pointer' },
-    error: { color: '#D32F2F', backgroundColor: '#FFCDD2', padding: '0.75rem', borderRadius: '0.5rem', width: '100%', maxWidth: '35.4375rem', textAlign: 'center', marginBottom: '0.5rem' },
-    success: { color: '#388E3C', backgroundColor: '#C8E6C9', padding: '0.75rem', borderRadius: '0.5rem', width: '100%', maxWidth: '35.4375rem', textAlign: 'center', marginBottom: '0.5rem' }
-  };
+  canvas: {
+    width: '100%',
+    minHeight: '100vh',
+    backgroundColor: '#F4E6D4',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontFamily: "'Open Sans', sans-serif",
+    margin: 0,
+    padding: '1.25rem',
+    boxSizing: 'border-box',
+    overflow: 'hidden'
+  },
 
+  card: {
+    width: '100%',
+    maxWidth: '37.5rem',
+    backgroundColor: '#FFF4DC',
+    borderRadius: '1.6875rem',
+    borderTopLeftRadius: '2.5rem',
+    borderTopRightRadius: '2.5rem',
+    position: 'relative',
+    boxShadow: '0 0.5rem 1rem rgba(0,0,0,0.1)',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    paddingBottom: '1.875rem'
+  },
+
+  waveHeader: {
+    width: '100%',
+    position: 'relative',
+    overflow: 'hidden',
+    display: 'flex',
+    justifyContent: 'center',
+    borderTopLeftRadius: '2.5rem',
+    borderTopRightRadius: '2.5rem'
+  },
+
+  waveSvg: {
+    display: 'block',
+    width: '100%',
+    height: 'auto'
+  },
+
+  waveShape: {
+    fill: '#C4451C'
+  },
+
+  cardBody: {
+    width: '100%',
+    padding: '0 1.25rem',
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
+
+  logoWrapper: {
+    marginTop: '-1.875rem',
+    width: '100%',
+    maxWidth: '20rem',
+    height: '5rem',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: '0.3125rem',
+    zIndex: 2
+  },
+
+  title: {
+    fontSize: '1.875rem',
+    fontWeight: 'bold',
+    color: '#5D4037',
+    margin: '0 0 0.625rem 0',
+    textAlign: 'center'
+  },
+
+  slogan: {
+    fontSize: '1.125rem',
+    fontWeight: '600',
+    color: '#5D4037',
+    margin: '0 0 0.9375rem 0',
+    textAlign: 'center'
+  },
+
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: '0.75rem',
+    width: '100%',
+    boxSizing: 'border-box'
+  },
+
+  inputGroup: {
+    width: '100%',
+    maxWidth: '35.4375rem',
+    height: '3.75rem',
+    backgroundColor: '#F9FAFB',
+    borderRadius: '6.25rem',
+    border: '0.125rem solid #5D4037',
+    display: 'flex',
+    alignItems: 'center',
+    padding: '0 1.25rem',
+    boxSizing: 'border-box'
+  },
+
+  iconWrapper: {
+    width: '1.5rem',
+    height: '1.5rem',
+    marginRight: '0.75rem',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0
+  },
+
+  eyeIconWrapper: {
+    width: '1.5rem',
+    height: '1.5rem',
+    marginLeft: '0.75rem',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer'
+  },
+
+  input: {
+    flex: 1,
+    border: 'none',
+    backgroundColor: 'transparent',
+    outline: 'none',
+    fontSize: '1.125rem',
+    color: '#5D4037'
+  },
+
+  controlsRow: {
+    width: '100%',
+    maxWidth: '35.4375rem',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: '0.3125rem',
+    marginBottom: '1.25rem'
+  },
+
+  forgotPassword: {
+    fontSize: '1rem',
+    color: '#735240',
+    textDecoration: 'none',
+    cursor: 'pointer'
+  },
+
+  submitBtn: {
+    width: '100%',
+    maxWidth: '35.4375rem',
+    height: '3.75rem',
+    backgroundColor: '#C7856A',
+    borderRadius: '1.6875rem',
+    border: 'none',
+    fontSize: '1.375rem',
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    cursor: 'pointer',
+    marginBottom: '1.5625rem'
+  },
+
+  registerText: {
+    fontSize: '1rem',
+    color: '#000000',
+    margin: 0,
+    textAlign: 'center'
+  },
+
+  registerLink: {
+    fontWeight: 'bold',
+    cursor: 'pointer'
+  },
+
+  checkboxWrapper: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.625rem',
+    fontSize: '1rem',
+    color: '#735240',
+    cursor: 'pointer'
+  },
+
+  checkbox: {
+    width: '1rem',
+    height: '1rem',
+    border: '0.125rem solid #5D4037',
+    borderRadius: '0.25rem',
+    backgroundColor: '#F9FAFB',
+    cursor: 'pointer'
+  },
+
+  error: {
+    color: '#D32F2F',
+    backgroundColor: '#FFCDD2',
+    padding: '0.75rem',
+    borderRadius: '0.5rem',
+    width: '100%',
+    maxWidth: '35.4375rem',
+    textAlign: 'center',
+    marginBottom: '0.5rem'
+  },
+
+  success: {
+    color: '#388E3C',
+    backgroundColor: '#C8E6C9',
+    padding: '0.75rem',
+    borderRadius: '0.5rem',
+    width: '100%',
+    maxWidth: '35.4375rem',
+    textAlign: 'center',
+    marginBottom: '0.5rem'
+  }
+};
   return (
     <div style={styles.canvas}>
       <div style={styles.card}>
         <div style={styles.waveHeader}>
           <svg style={styles.waveSvg} viewBox="0 0 100 30" preserveAspectRatio="none">
-            <path style={styles.waveShape} d="M0,10 C15,0 35,20 50,10 C65,0 85,20 100,10 V0 H0 Z" />
-          </svg>
+  
+  {/* Primera onda */}
+  <path 
+    style={styles.waveShape} 
+    d="M0,10 C15,0 35,20 50,10 C65,0 85,20 100,10 V0 H0 Z" 
+  />
+
+  {/* Segunda onda (más suave y transparente) */}
+  <path 
+    style={styles.waveShape} 
+    d="M0,15 C10,10 20,20 30,15 C40,10 50,20 60,15 C70,10 80,20 90,15 C100,10 110,20 120,15 V0 H0 Z" 
+    opacity="0.6"
+  />
+
+</svg>
         </div>
         <div style={styles.cardBody}>
+         <div style={styles.logoWrapper}>
+           <img src={logo} alt="Logo Traductor Runa Shimi" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+         </div>
           <h1 style={styles.title}>Traductor Runa Shimi</h1>
           <p style={styles.slogan}>Conecta con tus raíces ancestrales</p>
           
@@ -107,6 +322,10 @@ const Login = ({ onGoToRegister, onGoToRecuperar, onLoginSuccess }) => {
               </div>
             </div>
             <div style={styles.controlsRow}>
+               {/* Checkbox para recordar usuario */}
+              <label style={styles.checkboxWrapper}>
+                <input type="checkbox" style={styles.checkbox} /> Recordar
+              </label>
               <span style={styles.forgotPassword} onClick={onGoToRecuperar}>¿Olvidaste tu contraseña?</span>
             </div>
             <button type="submit" style={styles.submitBtn} disabled={loading}>

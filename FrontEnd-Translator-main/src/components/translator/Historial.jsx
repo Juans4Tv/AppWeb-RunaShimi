@@ -1,11 +1,24 @@
-// Importamos React y el hook useState
-import React, { useState } from "react";
+// Importamos React y los hooks necesarios
+import React, { useState, useEffect } from "react";
 
 // Importamos iconos para copiar y mostrar confirmación
 import { Copy, Check } from 'lucide-react';
 
 // Componente Historial
 const Historial = ({ historial = [] }) => {
+
+  // Estado para detectar si el dispositivo es móvil
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  // Detectar cambios en el tamaño de pantalla
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Estado que contiene el historial de traducciones 
   const historialData = historial.length > 0 ? historial : [
@@ -54,32 +67,35 @@ const Historial = ({ historial = [] }) => {
   const handleCopy = async (id, text) => {
     try {
       await navigator.clipboard.writeText(text); // Copia al portapapeles
-
       setCopiedId(id); // Marca el elemento como copiado
 
       // Después de 2 segundos vuelve al estado normal
       setTimeout(() => setCopiedId(null), 2000);
-
     } catch (err) {
       console.error("Error al copiar", err);
     }
   };
 
-  // --- ESTILOS 
+  // --- ESTILOS ---
   const styles = {
 
-    // Contenedor principal
+    // Contenedor principal adaptado para convivir con el menú lateral
     historialContainer: {
       width: '100%',
-      maxWidth: '50rem',
+      // Limitamos el ancho en celular para forzar el centrado
+      maxWidth: isMobile ? '20rem' : '50rem', 
+      padding: isMobile ? '0 0.5rem' : '0',
+      boxSizing: 'border-box',
       marginTop: '1.875rem',
       marginRight: 'auto',
       marginLeft: 'auto',
+      position: 'relative', 
+      zIndex: 1,
     },
 
     // Título
     header: {
-      fontSize: '2rem',
+      fontSize: isMobile ? '1.6rem' : '2rem', // Texto más pequeño en móvil
       color: '#5d4037',
       marginBottom: '1.25rem',
       textAlign: 'center',
@@ -106,12 +122,15 @@ const Historial = ({ historial = [] }) => {
       height: '100%',
     },
 
-    // Contenido interno de la tarjeta
+    // Contenido interno de la tarjeta (Apilado en móvil)
     cardContent: {
       display: 'flex',
-      alignItems: 'center',
+      flexDirection: isMobile ? 'column' : 'row',
+      alignItems: isMobile ? 'flex-start' : 'center',
       justifyContent: 'space-between',
-      padding: '0.625rem 0.9375rem',
+      padding: isMobile ? '0.8rem 1rem' : '0.625rem 0.9375rem',
+      position: 'relative', // Crucial para posicionar el botón de copiar en móvil
+      gap: isMobile ? '0.6rem' : '0',
     },
 
     // Sección izquierda de la fecha
@@ -119,7 +138,7 @@ const Historial = ({ historial = [] }) => {
       display: 'flex',
       alignItems: 'center',
       gap: '0.5rem',
-      minWidth: '8.125rem'
+      minWidth: isMobile ? 'auto' : '8.125rem'
     },
 
     // Estilo de la fecha
@@ -131,11 +150,12 @@ const Historial = ({ historial = [] }) => {
     // Sección central del texto
     textSection: {
       flex: 1,
+      width: '100%',
       fontSize: '0.8125rem',
       color: '#333'
     },
 
-    // Botón de accion copiar
+    // Botón de accion copiar (Flotante en móvil)
     actions: {
       display: 'flex',
       alignItems: 'center',
@@ -144,6 +164,9 @@ const Historial = ({ historial = [] }) => {
       color: '#8e8e8e', 
       transition: '0.2s',
       padding: '5px',
+      position: isMobile ? 'absolute' : 'static',
+      top: isMobile ? '0.8rem' : 'auto',
+      right: isMobile ? '1rem' : 'auto',
     },
 
     // Contenedor de paginación
@@ -198,7 +221,6 @@ const Historial = ({ historial = [] }) => {
           {/* Barra decorativa superior */}
           <div style={{
             ...styles.waveTop,
-
             // Cambia el color según el índice de historial
             backgroundColor: 
               index % 3 === 0 ? '#C4451C' : 
@@ -260,11 +282,11 @@ const Historial = ({ historial = [] }) => {
           {paginaActual} {paginaActual + 1 <= totalPaginas ? paginaActual + 1 : ''} ...
         </span>
 
-         {/* Botón para ir a la siguiente página  */}
+         {/* Botón para ir a la siguiente página */}
         <button 
           onClick={irSiguiente} 
           style={{...styles.pageButton, opacity: paginaActual === totalPaginas ? 0.5 : 1}}
-          disabled={paginaActual === totalPaginas}  
+          disabled={paginaActual === totalPaginas}
         >
           ›
         </button>

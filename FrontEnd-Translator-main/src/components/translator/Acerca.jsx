@@ -149,7 +149,7 @@ const Acerca = () => {
       fontWeight: 'bold',
     }
   };
- // Información de las tarjetas (contenido dinámico)
+ // Información de las tarjetas 
   const cardsInfo = [
     {
       title: 'Origen',

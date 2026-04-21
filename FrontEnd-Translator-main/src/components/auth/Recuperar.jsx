@@ -4,7 +4,7 @@ import logo from '../../assets/logo.png'; // importamos el logo
 // Componente de recuperación de contraseña
 const Recuperar = ({ onGoToLogin }) => {
 
-  //Estado para guardar el correo electronico ingresado por el usuario
+  //Estado para guardar el correo electronico ingresado 
   const [correo, setCorreo] = useState('');
 
   // Función que se ejecuta al enviar el formulario de recuperación

@@ -260,11 +260,11 @@ const Historial = ({ historial = [] }) => {
           {paginaActual} {paginaActual + 1 <= totalPaginas ? paginaActual + 1 : ''} ...
         </span>
 
-         {/* Botón para ir a la siguiente página */}
+         {/* Botón para ir a la siguiente página  */}
         <button 
           onClick={irSiguiente} 
           style={{...styles.pageButton, opacity: paginaActual === totalPaginas ? 0.5 : 1}}
-          disabled={paginaActual === totalPaginas}  // Desactiva el botón si ya estamos en la última página
+          disabled={paginaActual === totalPaginas}  
         >
           ›
         </button>

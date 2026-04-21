@@ -409,5 +409,5 @@ const Traductor = ({ onGoToLogin}) => {
   );
 }
 
-// Exportamos el componente
+// Exportamos 
 export default Traductor;

@@ -1,7 +1,7 @@
 // importamos react y los hooks 
 import React, { useState, useEffect } from 'react';
 
-// Componente Acerca del Runa Shimi
+// Componente Acerca del runa shimi
 const Acerca = () => {
   // Estado para detectar si es móvil o no
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);

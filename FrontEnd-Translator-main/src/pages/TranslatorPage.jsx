@@ -9,6 +9,7 @@ import Diccionario from '../components/translator/Diccionario';
 import FrasesComunes from '../components/translator/FrasesComunes';
 import Acerca from '../components/translator/Acerca';
 
+
 // Componente principal de la página del traductor
 const TranslatorPage = ({ isSidebarOpen, onToggleSidebar, onLogout }) => {
 

@@ -65,7 +65,7 @@ const Historial = ({ historial = [] }) => {
     }
   };
 
-  // --- ESTILOS ---
+  // --- ESTILOS 
   const styles = {
 
     // Contenedor principal

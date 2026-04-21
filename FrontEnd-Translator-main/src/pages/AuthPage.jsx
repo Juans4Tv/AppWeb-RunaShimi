@@ -22,6 +22,7 @@ const AuthPage = ({ currentView, onLoginSuccess, onGoToRegister, onGoToLogin, on
     case 'recuperar':
       return <Recuperar onGoToLogin={onGoToLogin} />;
 
+      
     // En cualquier otro caso , mostramos el Login
     default:
       return (

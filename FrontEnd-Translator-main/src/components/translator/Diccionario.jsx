@@ -22,7 +22,7 @@ const colors = ["#C74C22", "#4F7E53", "#5F477E", "#C6903D", "#4F6561", "#8E6953"
 // Componente Diccionario
 const Diccionario = () => {
 
-  // --- ESTADOS ---
+  // --- ESTADOS 
 
   // Detecta si es móvil
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);

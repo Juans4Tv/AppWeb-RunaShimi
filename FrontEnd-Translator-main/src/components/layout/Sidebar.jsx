@@ -26,7 +26,7 @@ const Sidebar = ({ isOpen = true, onToggle = () => {}, onLogout = () => {}, vist
     localStorage.removeItem('user');
     if (onLogout) onLogout();
   };
-
+//estilos
   const styles = {
     sidebar: {
       display: 'flex',

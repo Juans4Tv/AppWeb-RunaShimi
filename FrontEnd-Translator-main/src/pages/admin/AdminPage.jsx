@@ -141,6 +141,7 @@ const AdminPage = ({ isSidebarOpen, onToggleSidebar = () => {}, onLogout }) => {
               {error && <p style={styles.error}>{error}</p>}
             </div>
 
+
             <div style={styles.card}>
               <h3>Palabras del Diccionario ({palabras.length})</h3>
               <table style={styles.table}>

@@ -1,7 +1,7 @@
 // Importamos React y los hooks necesarios
 import React, { useState, useEffect } from 'react';
 
-// Componente
+// Componente frases 
 const FrasesComunes = () => {
 
   // Estado para detectar si el dispositivo es móvil

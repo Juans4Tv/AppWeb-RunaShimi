@@ -248,7 +248,7 @@ const Traductor = ({ onGoToLogin}) => {
       marginBottom: '0.9375rem'
     },
 
-    // Grid para inputs en PC
+    // Grid para inputs en el pc
     pcInputsGrid: {
       display: 'grid',
       gridTemplateColumns: '1fr 1fr',

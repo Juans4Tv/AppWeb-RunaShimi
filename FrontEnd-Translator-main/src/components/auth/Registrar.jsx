@@ -26,12 +26,13 @@ const Registrar = ({ onGoToLogin }) => {
       return;
     }
 
-    if (password.length < 4) {
-      setError('La contraseña debe tener al menos 4 caracteres');
-      setLoading(false);
-      return;
-    }
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[.*#@$!%?&])[A-Za-z\d.*#@$!%?&]{8,}$/;
 
+if (!passwordRegex.test(password)) {
+  setError('La contraseña debe tener mínimo 8 caracteres, una mayúscula, un número y un carácter especial (.*, #, etc)');
+  setLoading(false);
+  return;
+}
     try {
       const response = await fetch(`${API_URL}/register`, {
         method: 'POST',
@@ -265,6 +266,9 @@ const Registrar = ({ onGoToLogin }) => {
                 {mostrarContrasena ? <EyeOff size={20} color="#5D4037" /> : <Eye size={20} color="#5D4037" />}
               </div>
             </div>
+            <p style={{ fontSize: '0.75rem', color: '#5D4037', margin: '5px 0' }}>
+  La contraseña debe tener mínimo 8 caracteres, una mayúscula, un número y un carácter especial.
+</p>
             <div style={styles.inputGroup}>
               <Lock size={20} color="#5D4037" />
               <input type="password" placeholder="Confirmar contraseña" style={styles.input} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />

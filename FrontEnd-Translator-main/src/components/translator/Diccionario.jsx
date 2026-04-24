@@ -40,6 +40,9 @@ const Diccionario = () => {
   // Lista de palabras
   const [palabras, setPalabras] = useState(defaultPalabras);
 
+  // Guarda la letra a la que se le ha hecho clic
+  const [letraSeleccionada, setLetraSeleccionada] = useState(null);
+
   useEffect(() => {
     loadDictionary();
   }, [searchTerm]);
@@ -63,7 +66,15 @@ const Diccionario = () => {
   };
 
   // Letras del alfabeto (para mostrar visualmente) 
-  const alfabet = ["A", "ch", "h", "k", "l", "ll", "m", "n", "ñ", "p", "r", "s", "sh", "t", "ts", "w", "y"];
+  const alfabet = ["A", "ch", "h","i", "k", "l", "ll", "m", "n", "ñ", "p", "r", "s", "sh", "t", "ts","u","w", "y"];
+
+  // ACTUALIZADO: Mensajes específicos o reglas para ciertas letras
+  const reglasLetras = {
+    "k": "Reemplaza\nC y Q",
+    "h": "Reemplaza\nG y J",
+    "p": "Reemplaza\nB, V y F",
+    "t": "Reemplaza\nD"
+  };
 
   // --- FUNCIÓN COPIAR ---
 
@@ -188,22 +199,58 @@ const Diccionario = () => {
       cursor: 'pointer' 
     },
 
-    // Alfabeto
+    // Alfabeto 
     alphabet: { 
       display: 'flex', 
       flexWrap: 'wrap', 
       justifyContent: 'center', 
-      gap: isMobile ? '6px' : '12px', 
-      marginBottom: '2rem' 
+      gap: isMobile ? '10px' : '18px', 
+      marginBottom: '3rem' 
     },
 
-    // Letras
+    // Contenedor individual de cada letra 
+    letterContainer: {
+      position: 'relative',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+    },
+
+    // Letras 
     letter: { 
       fontSize: isMobile ? '1rem' : '1.4rem', 
       fontWeight: '900', 
       color: '#5D4037', 
       cursor: 'pointer',
-      padding: isMobile ? '2px 4px' : '0'
+      padding: isMobile ? '4px 8px' : '6px 12px',
+      borderRadius: '50%',
+      transition: 'all 0.2s ease',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
+
+    // Estilo cuando la letra está seleccionada 
+    letterActive: {
+      border: '2px solid #5D4037',
+    },
+
+    // El cuadro de mensaje debajo de la letra 
+    tooltip: {
+      position: 'absolute',
+      top: '100%',
+      marginTop: '8px',
+      backgroundColor: 'white',
+      border: '1.5px solid #5D4037',
+      borderRadius: '12px',
+      padding: '8px 16px',
+      fontSize: '0.85rem',
+      color: '#5D4037',
+      fontWeight: 'bold',
+      textAlign: 'center',
+      zIndex: 10,
+      boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+      minWidth: 'max-content'
     },
 
     // Grid de tarjetas
@@ -303,7 +350,27 @@ const Diccionario = () => {
       {/* Alfabeto */}
       <div style={styles.alphabet}>
         {alfabet.map(l => (
-          <span key={l} style={styles.letter}>{l}</span>
+          <div key={l} style={styles.letterContainer}>
+            <span 
+              style={{
+                ...styles.letter,
+                ...(letraSeleccionada === l ? styles.letterActive : {})
+              }}
+              onClick={() => setLetraSeleccionada(letraSeleccionada === l ? null : l)}
+            >
+              {l}
+            </span>
+
+            {/* Renderiza el mensaje si la letra está seleccionada y tiene una regla */}
+            {letraSeleccionada === l && reglasLetras[l] && (
+              <div style={styles.tooltip}>
+                {/* Separamos el texto por saltos de línea (\n) para que quede en dos renglones */}
+                {reglasLetras[l].split('\n').map((linea, index) => (
+                  <div key={index}>{linea}</div>
+                ))}
+              </div>
+            )}
+          </div>
         ))}
       </div>
 

@@ -1,23 +1,63 @@
 import React, { useState } from 'react'; // Importamos React y los hooks necesarios
 import logo from '../../assets/logo.png'; //logo
 
+const API_URL = "http://localhost:4000/api/auth";
+
 // Componente de recuperación de contraseña
 const Recuperar = ({ onGoToLogin }) => {
 
-  //Estado para guardar el correo electronico ingresado 
+  //Estado para guardar el correo electronico ingresar do 
   const [correo, setCorreo] = useState('');
+  
+  // Estado de carga
+  const [loading, setLoading] = useState(false);
+  
+  // Estado de mensaje
+  const [mensaje, setMensaje] = useState('');
+  
+  // Estado de error
+  const [error, setError] = useState('');
 
   // Función que se ejecuta al enviar el formulario de recuperación
-  const handleRecuperar = (e) => {
+  const handleRecuperar = async (e) => {
     e.preventDefault(); // Evitamos que la página se recargue al enviar el formulario
-    // Validamos que el campo de correo no esté vacío
+    
     if (correo.trim() === '') {
-      alert("Por favor, ingresa tu correo electrónico.");
+      setError("Por favor, ingresa tu correo electrónico.");
       return;
     }
-    alert(`Enlace de recuperación enviado a: ${correo}`);
+
+    setLoading(true);
+    setError('');
+    setMensaje('');
+
+    try {
+      const response = await fetch(`${API_URL}/recover-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: correo })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        if (data.temporalPassword) {
+          // Modo desarrollo - mostrar contraseña directamente
+          setMensaje(`Tu contraseña temporal es: ${data.temporalPassword}`);
+        } else {
+          setMensaje("Se ha enviado la contraseña a tu correo electrónico.");
+        }
+      } else {
+        setError(data.error || "Error al buscar el usuario");
+      }
+    } catch (err) {
+      setError("No se pudo conectar al servidor");
+    } finally {
+      setLoading(false);
+    }
   };
- // Estilos para el componente de recuperación de contraseña CC en JS
+
+  // Estilos para el componente de recuperación de contraseña CC en JS
   const styles = {
     // Contenedor principal
     canvas: {
@@ -123,6 +163,28 @@ const Recuperar = ({ onGoToLogin }) => {
       outline: 'none',
       fontSize: '16px'
     },
+    // Mensaje de éxito
+    successMessage: {
+      color: '#388E3C',
+      backgroundColor: '#C8E6C9',
+      padding: '1rem',
+      borderRadius: '0.5rem',
+      width: '100%',
+      textAlign: 'center',
+      marginBottom: '0.5rem',
+      fontSize: '16px',
+      fontWeight: 'bold'
+    },
+    // Mensaje de error
+    errorMessage: {
+      color: '#D32F2F',
+      backgroundColor: '#FFCDD2',
+      padding: '0.75rem',
+      borderRadius: '0.5rem',
+      width: '100%',
+      textAlign: 'center',
+      marginBottom: '0.5rem'
+    },
     // Boton de enviar enlace de recuperación
     submitBtn: {
       width: '100%',
@@ -149,7 +211,7 @@ const Recuperar = ({ onGoToLogin }) => {
     }
   };
 
-  // Renderizamos el componeentes 
+  // Renderizamos el componente 
   return (
     // Contenedor principal 
     <div style={styles.canvas}>
@@ -175,8 +237,13 @@ const Recuperar = ({ onGoToLogin }) => {
 
           <h2 style={styles.title}>¿Olvidaste tu contraseña?</h2>
           <p style={styles.slogan}>
-            Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.
+            Ingresa tu correo electrónico y te enviaremos tu contraseña.
           </p>
+          
+          {/* Mensajes */}
+          {error && <div style={styles.errorMessage}>{error}</div>}
+          {mensaje && <div style={styles.successMessage}>{mensaje}</div>}
+          
           {/* Formulario  */}
           <form onSubmit={handleRecuperar} style={styles.form}>
             <input
@@ -184,11 +251,11 @@ const Recuperar = ({ onGoToLogin }) => {
               type="email"
               placeholder="Ingresa tu correo electrónico"
               value={correo}
-              onChange={(e) => setCorreo(e.target.value)}//actualiza el estado del correo al escribir
+              onChange={(e) => setCorreo(e.target.value)}
             />
            {/* Botón para enviar el enlace de recuperación */}
-            <button type="submit" style={styles.submitBtn}>
-              Enviar enlace
+            <button type="submit" style={styles.submitBtn} disabled={loading}>
+              {loading ? 'Enviando...' : 'Enviar Contraseña'}
             </button>
           </form>
          {/* Botón para volver al inicio de sesión */}

@@ -42,10 +42,10 @@ const Registrar = ({ onGoToLogin }) => {
       const data = await response.json();
 
       if (response.ok) {
-        setSuccess('¡Registro exitoso! Ahora puedes iniciar sesión.');
+        setSuccess('¡Registro exitoso! Se ha enviado un correo de confirmación a ' + email);
         setTimeout(() => {
           onGoToLogin();
-        }, 2000);
+        }, 3000);
       } else {
         setError(data.error || 'Error al registrar');
       }

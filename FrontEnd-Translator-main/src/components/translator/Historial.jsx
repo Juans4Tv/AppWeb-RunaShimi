@@ -4,11 +4,23 @@ import React, { useState, useEffect } from "react";
 // Importamos iconos para copiar y mostrar confirmación
 import { Copy, Check } from 'lucide-react';
 
+// Constantes para la API
+const API_URL = "http://localhost:4000/api";
+
 // Componente Historial
-const Historial = ({ historial = [] }) => {
+const Historial = () => {
 
   // Estado para detectar si el dispositivo es móvil
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  // Estado para el historial desde la base de datos
+  const [historialData, setHistorialData] = useState([]);
+
+  // Estado de carga
+  const [loading, setLoading] = useState(true);
+
+  // Estado de error
+  const [error, setError] = useState('');
 
   // Detectar cambios en el tamaño de pantalla
   useEffect(() => {
@@ -20,8 +32,46 @@ const Historial = ({ historial = [] }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Cargar historial desde el backend
+  const loadHistorial = async () => {
+    setLoading(true);
+    setError('');
+
+    try {
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        setError('Inicia sesión para ver tu historial');
+        setLoading(false);
+        return;
+      }
+
+      const response = await fetch(`${API_URL}/history`, {
+        headers: {
+          'Authorization': token
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setHistorialData(data);
+      } else {
+        setError('Error al cargar historial');
+      }
+    } catch (err) {
+      setError('No se pudo conectar al servidor');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Cargar historial al iniciar
+  useEffect(() => {
+    loadHistorial();
+  }, []);
+
   // Estado que contiene el historial de traducciones 
-  const historialData = historial.length > 0 ? historial : [
+  const historial = historialData.length > 0 ? historialData : [
     { _id: 1, input: "Gracias", output: "Yupaychani", createdAt: "19 Mar, 10:30 AM" },
     { _id: 2, input: "Hola", output: "Imanalla", createdAt: "19 Mar, 11:00 AM" },
     { _id: 3, input: "tierra", output: "allpa", createdAt: "20 Mar, 10:00 AM" },
@@ -46,10 +96,10 @@ const Historial = ({ historial = [] }) => {
   const primerIndice = ultimoIndice - itemsPorPagina;
 
   // Elementos que se muestran en la página actual
-  const itemsActuales = historialData.slice(primerIndice, ultimoIndice);
+  const itemsActuales = historial.slice(primerIndice, ultimoIndice);
 
   // Total de páginas
-  const totalPaginas = Math.ceil(historialData.length / itemsPorPagina);
+  const totalPaginas = Math.ceil(historial.length / itemsPorPagina);
 
   // Ir a la siguiente página
   const irSiguiente = () => { 
@@ -99,6 +149,24 @@ const Historial = ({ historial = [] }) => {
       color: '#5d4037',
       marginBottom: '1.25rem',
       textAlign: 'center',
+    },
+
+    // Mensaje de carga o error
+    message: {
+      textAlign: 'center',
+      padding: '2rem',
+      color: '#666',
+    },
+
+    // Botón de reintentar
+    retryButton: {
+      marginTop: '1rem',
+      padding: '0.5rem 1rem',
+      backgroundColor: '#C4451C',
+      color: 'white',
+      border: 'none',
+      borderRadius: '0.5rem',
+      cursor: 'pointer',
     },
 
     // Tarjeta del historial
@@ -214,9 +282,26 @@ const Historial = ({ historial = [] }) => {
         Tu Historial de Traducciones <span>📚</span>
       </h1>
 
+      {/* Mensaje de carga */}
+      {loading && (
+        <div style={styles.message}>
+          <p>Cargando historial...</p>
+        </div>
+      )}
+
+      {/* Mensaje de error */}
+      {error && (
+        <div style={styles.message}>
+          <p>{error}</p>
+          <button style={styles.retryButton} onClick={loadHistorial}>
+            Reintentar
+          </button>
+        </div>
+      )}
+
       {/* Tarjetas del historial */}
-      {itemsActuales.map((item, index) => (
-        <div key={item.id || index} style={styles.cardHistorial}>
+      {!loading && !error && itemsActuales.map((item, index) => (
+        <div key={item._id || index} style={styles.cardHistorial}>
 
           {/* Barra decorativa superior */}
           <div style={{
@@ -238,7 +323,9 @@ const Historial = ({ historial = [] }) => {
             {/* Fecha */}
             <div style={styles.leftSection}>
               <div>📅</div>
-              <span style={styles.fecha}>{item.createdAt ? new Date(item.createdAt).toLocaleDateString() : ''}</span>
+              <span style={styles.fecha}>
+                {item.createdAt ? new Date(item.createdAt).toLocaleDateString() : ''}
+              </span>
             </div>
 
             {/* Texto */}
@@ -267,30 +354,32 @@ const Historial = ({ historial = [] }) => {
       ))}
 
       {/* Paginación */}
-      <div style={styles.paginationContainer}>
-         {/* Botón para ir a la página anterior */}
-        <button 
-          onClick={irAnterior} 
-          style={{...styles.pageButton, opacity: paginaActual === 1 ? 0.5 : 1}}
-          disabled={paginaActual === 1}
-        >
-          ‹
-        </button>
-        
-         {/* Texto que muestra las páginas */}
-        <span style={styles.pageInfo}>
-          {paginaActual} {paginaActual + 1 <= totalPaginas ? paginaActual + 1 : ''} ...
-        </span>
+      {!loading && !error && totalPaginas > 1 && (
+        <div style={styles.paginationContainer}>
+          {/* Botón para ir a la página anterior */}
+          <button 
+            onClick={irAnterior} 
+            style={{...styles.pageButton, opacity: paginaActual === 1 ? 0.5 : 1}}
+            disabled={paginaActual === 1}
+          >
+            ‹
+          </button>
+          
+          {/* Texto que muestra las páginas */}
+          <span style={styles.pageInfo}>
+            {paginaActual} {paginaActual + 1 <= totalPaginas ? paginaActual + 1 : ''} ...
+          </span>
 
-         {/* Botón para ir a la siguiente página */}
-        <button 
-          onClick={irSiguiente} 
-          style={{...styles.pageButton, opacity: paginaActual === totalPaginas ? 0.5 : 1}}
-          disabled={paginaActual === totalPaginas}
-        >
-          ›
-        </button>
-      </div>
+          {/* Botón para ir a la siguiente página */}
+          <button 
+            onClick={irSiguiente} 
+            style={{...styles.pageButton, opacity: paginaActual === totalPaginas ? 0.5 : 1}}
+            disabled={paginaActual === totalPaginas}
+          >
+            ›
+          </button>
+        </div>
+      )}
 
     </div>
   );

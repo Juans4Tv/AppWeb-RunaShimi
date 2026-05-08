@@ -1,9 +1,10 @@
 // src/services/ai.service.js
 const axios = require("axios");
+const Dictionary = require("../models/Dictionary");
 
 const IA_URL = "http://localhost:5001/translate";
 
-// Diccionario fallback (cuando IA no está disponible)
+// Diccionario fallback (cuando IA no está disponible y no hay BD)
 const diccionarioFallback = {
   // Español -> Runa Shimi
   "hola": "imanalla",
@@ -133,20 +134,62 @@ const traducirFallback = (text, toEspañol) => {
   return "[traducción no disponible]";
 };
 
+const traducirDesdeBD = async (text, toEspañol) => {
+  try {
+    const textLower = text.toLowerCase().trim();
+    let entry;
+
+    if (toEspañol) {
+      entry = await Dictionary.findOne({
+        target: { $regex: `^${textLower.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, $options: 'i' }
+      });
+      if (entry) return entry.source;
+
+      const palabras = textLower.split(' ');
+      const traducidas = [];
+      for (const palabra of palabras) {
+        const e = await Dictionary.findOne({
+          target: { $regex: `^${palabra.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, $options: 'i' }
+        });
+        traducidas.push(e ? e.source : palabra);
+      }
+      return traducidas.join(' ');
+    } else {
+      entry = await Dictionary.findOne({
+        source: { $regex: `^${textLower.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, $options: 'i' }
+      });
+      if (entry) return entry.target;
+
+      const palabras = textLower.split(' ');
+      const traducidas = [];
+      for (const palabra of palabras) {
+        const e = await Dictionary.findOne({
+          source: { $regex: `^${palabra.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, $options: 'i' }
+        });
+        traducidas.push(e ? e.target : palabra);
+      }
+      return traducidas.join(' ');
+    }
+  } catch (err) {
+    return null;
+  }
+};
+
 exports.translate = async (text, toEspañol = false) => {
   try {
     const response = await axios.post(IA_URL, {
       text,
       to_español: toEspañol
     }, {
-      timeout: 5000 // 5 segundos timeout
+      timeout: 5000
     });
 
     const result = response.data;
-    
-    // Si la IA devuelve "[sin traducción]", usar fallback
+
     if (result.translated_text === "[sin traducción]" || 
         result.translated_text === "[traducción no disponible]") {
+      const bdResult = await traducirDesdeBD(text, toEspañol);
+      if (bdResult) return { translated_text: bdResult };
       const fallbackResult = traducirFallback(text, toEspañol);
       return { ...result, translated_text: fallbackResult };
     }
@@ -154,8 +197,8 @@ exports.translate = async (text, toEspañol = false) => {
     return result;
 
   } catch (error) {
-    // Si hay error, usar diccionario fallback
-    console.log("IA no disponible, usando diccionario local...");
+    const bdResult = await traducirDesdeBD(text, toEspañol);
+    if (bdResult) return { translated_text: bdResult };
     const fallbackResult = traducirFallback(text, toEspañol);
     return { translated_text: fallbackResult };
   }

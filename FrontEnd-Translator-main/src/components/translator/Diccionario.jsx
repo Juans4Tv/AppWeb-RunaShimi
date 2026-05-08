@@ -10,14 +10,14 @@ const API_URL = "http://localhost:4000/api/dictionary";
 const colors = ["#C74C22", "#6A994E", "#E07A5F", "#C6903D", "#D4A373", "#B5653D"];
 
 const defaultPalabras = [
-  { _id: 1, source: "Gracias", target: "Yupaychani", language: "es-kic", color: colors[0] },
-  { _id: 2, source: "Hola", target: "Imanalla", language: "es-kic", color: colors[1] },
-  { _id: 3, source: "Tierra", target: "Allpa", language: "es-kic", color: colors[2] },
-  { _id: 4, source: "Agua", target: "Yaku", language: "es-kic", color: colors[3] },
-  { _id: 5, source: "Sol", target: "Inti", language: "es-kic", color: colors[4] },
-  { _id: 6, source: "Luna", target: "Killa", language: "es-kic", color: colors[5] },
-  { _id: 7, source: "Cielo", target: "Q'illqa", language: "es-kic", color: colors[0] },
-  { _id: 8, source: "Estrella", target: "Chaska", language: "es-kic", color: colors[1] },
+  { _id: 1, source: "Gracias", target: "Yupaychani", type: "Sustantivo", color: colors[0] },
+  { _id: 2, source: "Hola", target: "Imanalla", type: "Saludo", color: colors[1] },
+  { _id: 3, source: "Tierra", target: "Allpa", type: "Sustantivo", color: colors[2] },
+  { _id: 4, source: "Agua", target: "Yaku", type: "Sustantivo", color: colors[3] },
+  { _id: 5, source: "Sol", target: "Inti", type: "Sustantivo", color: colors[4] },
+  { _id: 6, source: "Luna", target: "Killa", type: "Sustantivo", color: colors[5] },
+  { _id: 7, source: "Cielo", target: "Q'illqa", type: "Sustantivo", color: colors[0] },
+  { _id: 8, source: "Estrella", target: "Chaska", type: "Sustantivo", color: colors[1] },
 ];
 
 // Componente Diccionario
@@ -392,7 +392,7 @@ const Diccionario = () => {
                   <h2 style={styles.runa}>{p.target}</h2>
                   <span style={styles.esp}>{p.source}</span>
                 </div>
-                <p style={styles.tipo}>({p.language})</p>
+                <p style={styles.tipo}>({p.type})</p>
               </div>
               
               {/* Botón copiar */}

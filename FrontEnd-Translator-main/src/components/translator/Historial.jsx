@@ -8,19 +8,14 @@ import { Copy, Check } from 'lucide-react';
 const API_URL = "http://localhost:4000/api";
 
 // Componente Historial
-const Historial = () => {
+const Historial = ({ historial: historialProp }) => {
 
   // Estado para detectar si el dispositivo es móvil
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
-  // Estado para el historial desde la base de datos
+  // Estado para cuando se usa sin prop (pagina de historial standalone)
   const [historialData, setHistorialData] = useState([]);
-
-  // Estado de carga
-  const [loading, setLoading] = useState(true);
-
-  // Estado de error
-  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   // Detectar cambios en el tamaño de pantalla
   useEffect(() => {
@@ -32,53 +27,21 @@ const Historial = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Cargar historial desde el backend
-  const loadHistorial = async () => {
-    setLoading(true);
-    setError('');
-
-    try {
-      const token = localStorage.getItem('token');
-      
-      if (!token) {
-        setError('Inicia sesión para ver tu historial');
-        setLoading(false);
-        return;
-      }
-
-      const response = await fetch(`${API_URL}/history`, {
-        headers: {
-          'Authorization': token
-        }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setHistorialData(data);
-      } else {
-        setError('Error al cargar historial');
-      }
-    } catch (err) {
-      setError('No se pudo conectar al servidor');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Cargar historial al iniciar
+  // Cargar historial propio si se usa sin prop (pagina standalone)
   useEffect(() => {
-    loadHistorial();
+    if (historialProp === undefined) {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+      setLoading(true);
+      fetch(`${API_URL}/history`, { headers: { 'Authorization': token } })
+        .then(r => r.json())
+        .then(data => { setHistorialData(data); setLoading(false); })
+        .catch(() => setLoading(false));
+    }
   }, []);
 
-  // Estado que contiene el historial de traducciones 
-  const historial = historialData.length > 0 ? historialData : [
-    { _id: 1, input: "Gracias", output: "Yupaychani", createdAt: "19 Mar, 10:30 AM" },
-    { _id: 2, input: "Hola", output: "Imanalla", createdAt: "19 Mar, 11:00 AM" },
-    { _id: 3, input: "tierra", output: "allpa", createdAt: "20 Mar, 10:00 AM" },
-    { _id: 4, input: "Agua", output: "Yaku", createdAt: "21 Mar, 09:00 AM" },
-    { _id: 5, input: "Sol", output: "Inti", createdAt: "21 Mar, 10:00 AM" },
-    { _id: 6, input: "Luna", output: "Killa", createdAt: "22 Mar, 08:30 AM" },
-  ];
+  // Historial: usa prop si existe, si no usa el propio
+  const historial = historialProp !== undefined ? historialProp : historialData;
 
   // --- Estado para saber que elemento se copio ---
   const [copiedId, setCopiedId] = useState(null);
@@ -282,25 +245,22 @@ const Historial = () => {
         Tu Historial de Traducciones <span>📚</span>
       </h1>
 
-      {/* Mensaje de carga */}
+      {/* Sin historial */}
+      {historial.length === 0 && !loading && (
+        <div style={styles.message}>
+          <p>Aún no tienes traducciones en tu historial</p>
+        </div>
+      )}
+
+      {/* Cargando (solo en pagina standalone) */}
       {loading && (
         <div style={styles.message}>
           <p>Cargando historial...</p>
         </div>
       )}
 
-      {/* Mensaje de error */}
-      {error && (
-        <div style={styles.message}>
-          <p>{error}</p>
-          <button style={styles.retryButton} onClick={loadHistorial}>
-            Reintentar
-          </button>
-        </div>
-      )}
-
       {/* Tarjetas del historial */}
-      {!loading && !error && itemsActuales.map((item, index) => (
+      {historial.length > 0 && itemsActuales.map((item, index) => (
         <div key={item._id || index} style={styles.cardHistorial}>
 
           {/* Barra decorativa superior */}
@@ -354,7 +314,7 @@ const Historial = () => {
       ))}
 
       {/* Paginación */}
-      {!loading && !error && totalPaginas > 1 && (
+      {historial.length > 0 && totalPaginas > 1 && (
         <div style={styles.paginationContainer}>
           {/* Botón para ir a la página anterior */}
           <button 

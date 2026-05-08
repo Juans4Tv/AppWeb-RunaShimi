@@ -2,9 +2,9 @@
 const mongoose = require("mongoose");
 
 const dictionarySchema = new mongoose.Schema({
-  source: String,
-  target: String,
-  language: String // "kic-es" o "es-kic"
+  source: String,          // español
+  target: String,          // runa shimi
+  type: String             // tipo de palabra (sustantivo, verbo, etc.)
 });
 
 module.exports = mongoose.model("Dictionary", dictionarySchema);

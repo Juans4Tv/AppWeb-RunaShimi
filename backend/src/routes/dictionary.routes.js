@@ -9,11 +9,12 @@ router.get("/", async (req, res) => {
       query = {
         $or: [
           { source: { $regex: search, $options: 'i' } },
-          { target: { $regex: search, $options: 'i' } }
+          { target: { $regex: search, $options: 'i' } },
+          { type: { $regex: search, $options: 'i' } }
         ]
       };
     }
-    const words = await Dictionary.find(query).limit(50);
+    const words = await Dictionary.find(query).limit(5000);
     res.json(words);
   } catch (error) {
     res.status(500).json({ error: "Error al buscar" });
@@ -22,8 +23,8 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
-    const { source, target, language } = req.body;
-    const word = await Dictionary.create({ source, target, language });
+    const { source, target, type } = req.body;
+    const word = await Dictionary.create({ source, target, type });
     res.json(word);
   } catch (error) {
     res.status(500).json({ error: "Error al agregar palabra" });

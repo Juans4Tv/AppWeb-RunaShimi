@@ -243,7 +243,7 @@ paginationDots: {
           <div>
             <div style={styles.card}>
               <h3>Importar Diccionario (Excel)</h3>
-              <p style={{color: '#666', marginBottom: '1rem'}}>El Excel debe tener columnas: source, target, language</p>
+              <p style={{color: '#666', marginBottom: '1rem'}}>El Excel debe tener columnas: español | runa shimi | tipo de palabra</p>
               <label style={{ ...styles.uploadArea, display: 'block' }}>
                 <input type="file" accept=".xlsx,.xls" onChange={handleUploadExcel} style={{display: 'none'}} />
                 <Upload size={32} color="#5D4037" style={{margin: '0 auto'}} />
@@ -273,7 +273,7 @@ paginationDots: {
                     <tr>
                       <th style={styles.th}>Español</th>
                       <th style={styles.th}>Runa Shimi</th>
-                      <th style={styles.th}>Idioma</th>
+                      <th style={styles.th}>Tipo</th>
                       <th style={styles.th}>Acción</th>
                     </tr>
                   </thead>
@@ -282,7 +282,7 @@ paginationDots: {
                       <tr key={p._id || i}>
                         <td style={styles.td}>{p.source}</td>
                         <td style={styles.td}><b>{p.target}</b></td>
-                        <td style={styles.td}>{p.language}</td>
+                        <td style={styles.td}>{p.type || ''}</td>
                         <td style={styles.td}>
                           <button onClick={() => handleDeletePalabra(p._id)} style={{background: 'none', border: 'none', cursor: 'pointer', color: 'red'}}>
                             <Trash2 size={18} />

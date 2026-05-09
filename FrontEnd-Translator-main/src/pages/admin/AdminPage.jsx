@@ -139,7 +139,7 @@ const AdminPage = ({ isSidebarOpen, onToggleSidebar = () => {}, onLogout }) => {
 
   // --- ESTILOS RESPONSIVOS PARA CLAVAR EL DISEÑO ---
   const styles = {
-    container: { display: 'flex', minHeight: '100vh', backgroundColor: '#F4E6D4' },
+    container: { display: 'flex', height: '100vh', backgroundColor: '#F4E6D4'},
     main: { flex: 1, marginLeft: isSidebarOpen ? (isMobile ? '0' : '15.625rem') : (isMobile ? '0' : '3.75rem'), padding: isMobile ? '1rem' : '2rem', overflowY: 'auto', transition: 'margin-left 0.3s ease' },
     header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' },
     title: { fontSize: isMobile ? '1.5rem' : '2rem', color: '#5D4037', margin: 0, fontWeight: 'bold' },

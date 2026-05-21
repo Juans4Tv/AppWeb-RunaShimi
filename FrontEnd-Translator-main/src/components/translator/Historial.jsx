@@ -52,7 +52,7 @@ const Historial = ({ historial: historialProp }) => {
   const [paginaActual, setPaginaActual] = useState(1);
 
   // Cantidad de elementos por página
-  const itemsPorPagina = 3;
+  const itemsPorPagina = 5;
 
   // Índices para cortar el array
   const ultimoIndice = paginaActual * itemsPorPagina;

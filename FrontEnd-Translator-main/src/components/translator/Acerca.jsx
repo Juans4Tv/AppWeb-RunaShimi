@@ -238,16 +238,34 @@ const Acerca = () => {
       </div>
 
       {/* Footer del componente/ pie de pagina */}
+      
+     
+     {/* Sección: Sobre los Creadores */}
+      <div style={{ textAlign: 'center', margin: '30px 0 20px 0' }}>
+        <h3 style={{ fontSize: '1.1rem', color: '#4a2f1d', marginBottom: '8px' }}>
+          👩🏽‍💻 Sobre los Creadores 👨🏽‍💻
+        </h3>
+        <p style={{ fontSize: '0.9rem', color: '#4a2f1d', maxWidth: '750px', margin: '0 auto', lineHeight: '1.5' }}>
+          Somos Juan Miguel cedeño  y Lilibeth Andrea Anacona , estudiantes de la <strong>Fundación Universitaria de Popayán (FUP)</strong>. 
+          Desarrollamos esta aplicación como un proyecto académico dedicado a la preservación y revitalización del idioma Runa Shimi.
+        </p>
+      </div>
+
+      {/* Footer del componente/ pie de pagina */}
       <div style={styles.footerLine}>
-        <span style={styles.footerText}>🌿 Preservando las lenguas ancestrales ⛰️</span>
+        <span style={styles.footerText}>Preservando las lenguas ancestrales ⛰️</span>
         <span style={styles.footerText}>Hecho con amor para la comunidad 🌍</span>
       </div>
       
-      {/*nota final */}
+      {/* nota final */}
       <p style={styles.disclaimer}>
         ✨ Este traductor es una herramienta educativa. Las traducciones pueden variar según la región y dialecto. ✨
       </p>
     </div>
+  
+  
+      
+    
   );
 };
 

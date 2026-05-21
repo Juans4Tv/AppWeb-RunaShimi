@@ -20,7 +20,7 @@ const Sidebar = ({ isOpen = true, onToggle = () => {}, onLogout, vistaActual = '
         { icon: <Search size={20} />, text: 'Frases Comunes', vista: 'frases' },
         { icon: <History size={20} />, text: 'Historial', vista: 'historial' },
         { icon: <BookOpen size={20} />, text: 'Diccionario', vista: 'diccionario' },
-        { icon: <Info size={20} />, text: 'Acerca de Runa Shimi', vista: 'acerca' },
+        { icon: <Info size={20} />, text: 'Acerca de ', vista: 'acerca' },
       ];
 
   const handleLogout = () => {

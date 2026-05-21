@@ -138,17 +138,18 @@ const Login = ({ onGoToRegister, onGoToRecuperar, onLoginSuccess }) => {
   },
 
   inputGroup: {
-    width: '100%',
-    maxWidth: '35.4375rem',
-    height: '3.75rem',
-    backgroundColor: '#F9FAFB',
-    borderRadius: '6.25rem',
-    border: '0.125rem solid #5D4037',
-    display: 'flex',
-    alignItems: 'center',
-    padding: '0 1.25rem',
-    boxSizing: 'border-box'
-  },
+  width: '100%',
+  maxWidth: '35.4375rem',
+  minHeight: '3.75rem',
+  backgroundColor: '#F9FAFB',
+  borderRadius: '6.25rem',
+  border: '0.125rem solid #5D4037',
+  display: 'flex',
+  alignItems: 'center',
+  padding: '0 0.8rem',
+  boxSizing: 'border-box',
+  overflow: 'hidden'
+},
 
   iconWrapper: {
     width: '1.5rem',
@@ -161,24 +162,26 @@ const Login = ({ onGoToRegister, onGoToRecuperar, onLoginSuccess }) => {
   },
 
   eyeIconWrapper: {
-    width: '1.5rem',
-    height: '1.5rem',
-    marginLeft: '0.75rem',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    cursor: 'pointer'
-  },
+  width: '20px',
+  height: '20px',
+  minWidth: '20px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  cursor: 'pointer',
+  marginLeft: '4px'
+},
 
-  input: {
-    flex: 1,
-    border: 'none',
-    backgroundColor: 'transparent',
-    outline: 'none',
-    fontSize: '1.125rem',
-    color: '#5D4037'
-  },
-
+ input: {
+  flex: 1,
+  width: '100%',
+  minWidth: 0,
+  border: 'none',
+  backgroundColor: 'transparent',
+  outline: 'none',
+  fontSize: '1rem',
+  color: '#5D4037'
+},
   controlsRow: {
     width: '100%',
     maxWidth: '35.4375rem',
@@ -309,17 +312,24 @@ const Login = ({ onGoToRegister, onGoToRecuperar, onLoginSuccess }) => {
                 </svg>
               </div>
               <input type={mostrarContrasena ? "text" : "password"} placeholder="Contraseña" style={styles.input} value={password} onChange={(e) => setPassword(e.target.value)} />
-              <div style={styles.eyeIconWrapper} onClick={() => setMostrarContrasena(!mostrarContrasena)}>
-                {mostrarContrasena ? (
-                  <svg viewBox="0 0 640 512" fill="#5D4037" width="100%" height="100%">
-                    <path d="M320 400c-75.85 0-137.25-58.71-142.9-133.11L72.2 185.82c-13.79 17.3-26.48 35.59-36.72 55.59a32.35 32.35 0 0 0 0 29.19C89.71 376.41 197.07 448 320 448c26.91 0 52.87-4 77.89-10.46L346.39 397.39a144.13 144.13 0 0 1 -26.39 2.61z"/>
+             {/*ojo*/}
+              <div
+                  style={styles.eyeIconWrapper}
+                  onClick={() => setMostrarContrasena(!mostrarContrasena)}>
+                  {mostrarContrasena ? (
+                  <svg viewBox="0 0 640 512" fill="#5D4037"style={{ width: '18px', height: '18px' }}>
+                  <path d="M633.8 458.1L77.7 2C70.7-3.7 60.6-2.7 54.9 4.3L45.7 15.5C40 22.5 41 32.6 48 38.3l76.6 62.8C72.6 146.9 33.2 192.1 7.5 241.4a32.35 32.35 0 0 0 0 29.2C61.7 376.4 169.1 448 292 448c67.8 0 132.2-21.4 188.2-58.5l105.6 86.7c7 5.7 17.1 4.7 22.8-2.3l9.2-11.2c5.7-7 4.7-17.1-2.3-22.8zM320 400c-98.7 0-189.1-55-237.9-144a317.4 317.4 0 0 1 74.1-91.9l39.6 32.5A111.4 111.4 0 0 0 320 400zm0-224a110.8 110.8 0 0 0-32.7 4.9l85.8 70.4a55.8 55.8 0 0 0-69.4-69.4l-16.4-13.5A111 111 0 0 1 320 176zm313.3 65.4C579.1 135.6 471.7 64 348.8 64c-35.5 0-69.3 6.1-100.4 17.3l39.6 32.5A272.1 272.1 0 0 1 348.8 112c98.7 0 189.1 55 237.9 144a317.2 317.2 0 0 1-68.5 85.4l37.8 31A366.6 366.6 0 0 0 633.3 270.6a32.35 32.35 0 0 0 0-29.2z"/>
                   </svg>
-                ) : (
-                  <svg viewBox="0 0 576 512" fill="#5D4037" width="100%" height="100%">
-                    <path d="M288 144a110.94 110.94 0 0 0 -31.24 5 55.4 55.4 0 0 1 7.24 27 56 56 0 0 1 -56 56 55.4 55.4 0 0 1 -27-7.24A111.71 111.71 0 1 0 288 144zm284.52 97.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400c-98.65 0-189.09-55-237.93-144C98.91 167 189.34 112 288 112s189.09 55 237.93 144C477.1 345 386.66 400 288 400z"/>
-                  </svg>
-                )}
-              </div>
+                    ) : (
+                      <svg
+                        viewBox="0 0 576 512"
+                        fill="#5D4037"
+                        style={{ width: '18px', height: '18px' }}
+                      >
+                        <path d="M288 144a110.94 110.94 0 0 0-31.24 5 55.4 55.4 0 0 1 7.24 27 56 56 0 0 1-56 56 55.4 55.4 0 0 1-27-7.24A111.71 111.71 0 1 0 288 144zm284.52 97.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400c-98.65 0-189.09-55-237.93-144C98.91 167 189.34 112 288 112s189.09 55 237.93 144C477.1 345 386.66 400 288 400z"/>
+                      </svg>
+                    )}
+                </div>
             </div>
             <div style={styles.controlsRow}>
                {/* Checkbox para recordar usuario */}
